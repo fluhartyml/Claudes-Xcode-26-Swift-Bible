@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Chapter 1: Introducing Swift and Xcode</title>
+  <link rel="stylesheet" type="text/css" href="styles.css"/>
+</head>
+<body>
+  <h1>Chapter 1: Introducing Swift and Xcode</h1>
+  <p><em>Claude's Xcode 26 Swift Bible — Part I: Introduction</em></p>
+
+  <h2>1. What Swift Is</h2>
+
+  <p>1.1 Swift is the programming language Apple made to build apps. They announced it at WWDC 2014 to replace Objective-C, which had been the language since the NeXT days.</p>
+
+  <p>1.2 As of 2026 we're on Swift 6.x — don't confuse the Swift version with the Xcode version. Xcode jumped to 26 but Swift is still on 6.x. They're versioned independently. The big deal with Swift 6 is strict concurrency — the compiler won't let you accidentally share data between threads in a way that causes crashes. It's annoying at first but it catches real bugs.</p>
+
+  <p>1.3 Here's what Swift gives you:</p>
+
+  <p>1.4 <strong>Type-safe</strong> — the compiler catches mistakes before your code runs. If you try to add a String (text, like <code>"hello"</code>) to an Int (short for Integer — a whole number, like <code>42</code>), it stops you right there. No guessing at runtime.</p>
+
+  <p>1.5 <strong>Compiled</strong> — your code gets turned into native machine code. It's not interpreted like Python or JavaScript. It runs fast because it's talking directly to the hardware.</p>
+
+  <p>1.6 <strong>Protocol-oriented</strong> — protocols are contracts. A type says "I conform to this protocol" and the compiler holds it to that promise. Think of it like a spec sheet — the part either meets spec or it doesn't.</p>
+
+  <p>1.7 <strong>Memory-managed</strong> — ARC (Automatic Reference Counting) handles memory for you. No malloc, no free, no chasing memory leaks with a debugger at 2 AM. It counts how many things are using an object and cleans it up when nobody needs it anymore.</p>
+
+  <p>1.8 Your code goes in <code>.swift</code> files. That's the only file type you write code in.</p>
+
+  <h2>2. What Xcode Is</h2>
+
+  <p>2.1 Xcode is Apple's IDE (Integrated Development Environment — a program that puts your code editor, build tools, and debugger all in one place). It's the only way to build and ship apps for Apple platforms. Free from the Mac App Store — no account needed to download it, no subscription needed to write code and test on simulators. You only need the paid Apple Developer Program ($99/year) when you're ready to publish to the App Store or use advanced capabilities like CloudKit and Push Notifications.</p>
+
+  <p>2.2 It's a lot of tools in one box:</p>
+  <ul>
+    <li>A code editor with syntax highlighting and autocomplete</li>
+    <li>A build system that compiles your Swift into an app</li>
+    <li>SwiftUI Previews so you can see your layout without running</li>
+    <li>Simulators for testing on virtual iPhones, iPads, Apple TVs</li>
+    <li>Instruments for finding performance problems</li>
+    <li>Signing and provisioning for App Store submission</li>
+  </ul>
+
+  <p>2.3 Xcode versions track the OS releases. Xcode 26 ships alongside iOS 26, macOS 26, and so on. Always use the latest Xcode when submitting to the App Store.</p>
+
+  <p>2.4 You build in the latest Xcode, but your app doesn't have to require the latest iOS. The <strong>deployment target</strong> is the oldest OS version your app will run on — developers call this the <strong>floor</strong>. Set the floor lower and more people can use your app — someone still on iOS 16 can install it. Set it higher and you get access to newer features without <code>if #available</code> checks everywhere. It's a tradeoff: wider audience vs cleaner code. Pick the oldest version that makes sense for your app and stick with it early — adding backwards compatibility later is tedious.</p>
+
+  <p>2.5 <strong>What happens when you raise the floor:</strong> Say you ship v1.0 with a deployment target of iOS 15. Someone on iOS 16 downloads it. Works fine. Now you ship v2.0 and raise the deployment target to iOS 26. That person on iOS 16 can no longer get v2.0. But the App Store doesn't cut them off entirely — it still offers them v1.0. If they search for your app, they can download it and get the last version that works on their phone. They just won't get v2.0 until they upgrade their device. And if they already had v1.0 installed, it stays on their phone untouched.</p>
+
+  <p>2.6 So raising the deployment target doesn't break existing users — it locks out future updates for people on older devices. That's why some developers keep the floor low even when they don't technically need to. Every version bump you make to the deployment target is a group of users you're leaving behind.</p>
+
+  <p>_2.7 But you can't always choose freely. Your floor is dictated by the newest framework your app uses. QuickNote uses <strong>SwiftData</strong>, which Apple introduced in iOS 17. Set the floor to iOS 16 and the project compiles — but the app crashes on launch on an iOS 16 device because SwiftData doesn't exist there. So your floor is iOS 17.0 (Fig. 1.15). When in doubt, check which iOS version introduced the features you're using. Your floor is always the highest one.</p>
+
+  <figure>
+    <img src="figures/ch01/fig-1-15-minimum-deployments-ios17.png" alt="Minimum Deployments set to iOS 17.0" style="max-width:100%;" />
+    <figcaption>Fig. 1.15 — Minimum Deployments set to iOS 17.0</figcaption>
+  </figure>
+
+  <h2>3. Opening Xcode for the First Time</h2>
+
+  <p>3.1 Launch it. You get a Welcome screen with three choices (Fig. 1.1):</p>
+
+  <figure>
+    <img src="figures/ch01/fig-1-1-xcode-welcome-screen.png" alt="Xcode Welcome Screen" style="max-width:100%;" />
+    <figcaption>Fig. 1.1 — Xcode Welcome Screen</figcaption>
+  </figure>
+
+  <p>3.2 1) <strong>Create New Project</strong> — starts from a template</p>
+
+  <p>3.3 2) <strong>Clone Git Repository</strong> — pulls a project from GitHub</p>
+
+  <p>3.4 3) <strong>Open Existing Project</strong> — opens a <code>.xcodeproj</code> or <code>.xcworkspace</code></p>
+
+  <p>_3.5 The right side shows your recent projects (see Fig. 1.1). Click one to jump straight back in. The left side is where you start something new.</p>
+
+  <h2>4. Creating a New Project</h2>
+
+  <p>_4.1 Xcode walks you through a wizard. We're going to create the first example project for this book — <strong>QuickNote</strong>, a simple note-taking app. Follow along.</p>
+
+  <p>_4.2 1) Click <strong>Create New Project</strong> on the Welcome screen. You get the template picker (Fig. 1.2).</p>
+
+  <figure>
+    <img src="figures/ch01/fig-1-2-template-picker.png" alt="Template Picker" style="max-width:100%;" />
+    <figcaption>Fig. 1.2 — Template Picker</figcaption>
+  </figure>
+
+  <p>_4.3 Pick "App" under the Multiplatform tab. This gives you a SwiftUI app that runs on iPhone, iPad, and Mac from the same codebase. Hit Next.</p>
+
+  <p>_4.4 2) <strong>Product Name</strong> — type <code>QuickNote</code>. This becomes the folder name and the app's display name. You'll see the project options screen (Fig. 1.3).</p>
+
+  <figure>
+    <img src="figures/ch01/fig-1-3-project-options-blank.png" alt="Project Options (blank)" style="max-width:100%;" />
+    <figcaption>Fig. 1.3 — Project Options (blank)</figcaption>
+  </figure>
+
+  <p>_4.5 3) <strong>Organization Identifier</strong> — this is a reverse-DNS style label, like <code>com.ClaudeX26Bible</code>. Combined with the product name, it forms your <strong>Bundle Identifier</strong> — <code>com.ClaudeX26Bible.QuickNote</code>. Read it right to left like a mailing address: commercial entity ClaudeX26Bible, product QuickNote. Apple uses this string to tell every app apart on every device in the world. No two apps on the App Store can share one.</p>
+
+  <p>_4.6 Think of the organization identifier as a brand name — it logically groups all your apps under one umbrella without any physical connection between them. <code>com.ClaudeX26Bible.QuickNote</code> and <code>com.ClaudeX26Bible.TapTally</code> are completely separate apps that don't share code or data, but the identifier tells the App Store they come from the same developer. It's a conceptual link, not a technical one.</p>
+
+  <p>_4.7 4) <strong>Storage</strong> — pick SwiftData. QuickNote needs to remember your notes between launches — that's called <a href="glossary.xhtml#persistence">persistence</a>. If an app doesn't save anything (like a calculator or a simple timer), pick None. You can always add storage later.</p>
+
+  <p>_4.8 5) <strong>Include Tests</strong> — check it. Tests are a separate target inside your project where you can write code that verifies your app works correctly — things like "if I add an item, the count should go up by one." They don't run automatically when you build or launch your app. You run them on purpose with Cmd+U. Most solo developers just build and run to verify their work, but having the empty test target there costs nothing and saves you the hassle of adding one later if you ever need it. Your filled-in options should look like Fig. 1.4.</p>
+
+  <figure>
+    <img src="figures/ch01/fig-1-4-project-options-quicknote.png" alt="Project Options (QuickNote filled in)" style="max-width:100%;" />
+    <figcaption>Fig. 1.4 — Project Options (QuickNote filled in)</figcaption>
+  </figure>
+
+  <p>_4.9 Hit Next, pick a save location, check "Create Git repository on my Mac," and hit Create. Xcode generates your project and opens the workspace (Fig. 1.5).</p>
+
+  <figure>
+    <img src="figures/ch01/fig-1-5-xcode-workspace.png" alt="Xcode Workspace with QuickNote" style="max-width:100%;" />
+    <figcaption>Fig. 1.5 — Xcode Workspace with QuickNote</figcaption>
+  </figure>
+
+  <p>_4.10 This is your home base. The left panel is the <strong>Project Navigator</strong> — every file in your project. The center is the <strong>Editor</strong> — where you write code. The right panel is the <strong>Inspectors</strong> — properties of whatever you've selected. Remember Delphi's Object Inspector? Same idea. The cells and columns where you could click to change a property — Xcode's Inspector panel does the same thing. Every property you see in the Inspector can also be written as a dot-modifier in code. We'll connect those two in Chapter 2.</p>
+
+  <p>_4.11 Hit the Play button (or Cmd+R) to build and run. Xcode compiles your code, boots the simulator, and launches QuickNote (Fig. 1.8).</p>
+
+  <figure>
+    <img src="figures/ch01/fig-1-8-simulator-booting.png" alt="Simulator Booting" style="max-width:100%;" />
+    <figcaption>Fig. 1.8 — Simulator Booting</figcaption>
+  </figure>
+
+  <p>_4.12 Don't worry about Git or GitHub at this stage — just get the project created and running. Version control is covered in <a href="chapter20.xhtml">Chapter 20: Git and GitHub</a>.</p>
+
+  <h2>5. The Project Structure</h2>
+
+  <figure>
+    <img src="figures/ch01/fig-1-14-project-navigator-structure.png" alt="Project Navigator with QuickNote" style="max-width:100%;" />
+    <figcaption>Fig. 1.14 — Project Navigator with QuickNote</figcaption>
+  </figure>
+
+  <p>_5.1 Look at the left panel (Fig. 1.14) — the Project Navigator. This is every file Xcode created for you. If you've used Delphi or Visual Basic, this is your project tree. Same concept, different names.</p>
+
+  <p>_5.2 Your QuickNote project has three groups:</p>
+
+  <pre><code>QuickNote/
+  Assets.xcassets          — app icon, accent color, images
+  ContentView.swift        — your first view (the screen the user sees)
+  Info.plist               — app configuration (privacy permissions, etc.)
+  Item.swift               — a SwiftData model (your data structure)
+  QuickNote.entitlements   — capabilities like iCloud, MusicKit
+  QuickNoteApp.swift       — the @main entry point (the app launches here)
+
+QuickNoteTests/
+  QuickNoteTests.swift     — unit tests (Cmd+U to run)
+
+QuickNoteUITests/
+  QuickNoteUITests.swift           — UI tests that simulate taps and swipes
+  QuickNoteUITestsLaunchTests.swift — launch performance tests</code></pre>
+
+  <p>5.3 The <code>.xcodeproj</code> file is actually a folder. macOS shows it as a single file but inside there's:</p>
+  <ul>
+    <li><code>project.pbxproj</code> — the master file that tracks every file, target, and build setting</li>
+    <li><code>xcshareddata/</code> — shared schemes</li>
+    <li><code>xcuserdata/</code> — your personal settings like window positions and breakpoints</li>
+  </ul>
+
+  <p>5.4 Don't edit <code>project.pbxproj</code> by hand unless you really know what you're doing.</p>
+
+  <p>_5.4 <strong>Why multiple files instead of one big one?</strong> A fresh Xcode project gives you one <code>ContentView.swift</code> and you can technically put your entire app in it. Some people do. But as the app grows, that file becomes a 2,000-line wall of code where everything is tangled together — the settings screen, the data models, the network calls, the UI layout — all in one place. Finding anything means scrolling for minutes. Changing one thing risks breaking something unrelated.</p>
+
+  <p>_5.5 The fix is <strong>normalization</strong> <a href="glossary.xhtml#normalization">Normalization</a> — splitting your code into separate files where each file does one job. The term comes from database normalization (Edgar F. Codd, IBM, 1970) — the principle that each piece of information should live in one place, with no duplication. In databases, that means one table per concept. In code, it means one file per responsibility. Same instinct — don't pile everything in one place, separate concerns so each piece is independent and findable. Think of it like a filing cabinet vs a pile on your desk. Both hold the same papers, but one lets you find things.</p>
+
+  <p>_5.6 <strong>How to break it down:</strong></p>
+  <ul>
+    <li><strong>One view per file.</strong> <code>SettingsView.swift</code>, <code>OnboardingView.swift</code>, <code>PlayerRow.swift</code>. If it draws something on screen, it gets its own file.</li>
+    <li><strong>Models in a Models folder.</strong> Data types that hold your app's information — <code>RepoSettings.swift</code>, <code>Player.swift</code>. These don't draw anything, they just define the shape of your data.</li>
+    <li><strong>Services in a Services folder.</strong> Code that talks to the outside world — <code>GitService.swift</code> for GitHub, <code>MusicService.swift</code> for MusicKit. The views call the service, the service does the work, the views show the result.</li>
+    <li><strong>The main app file stays thin.</strong> <code>MyAppApp.swift</code> sets up the window and points to <code>ContentView</code>. That's it.</li>
+    <li><strong>ContentView is the traffic cop.</strong> It decides which view to show (sidebar navigation, tab bar, onboarding check) but doesn't do the actual work. Each destination is its own file.</li>
+  </ul>
+
+  <p>_5.7 <strong>Real example:</strong> Git Portfol.io has 14 Swift files — ContentView + 10 views + 1 model + 1 service + 1 developer notes. Each view handles one screen. The service handles all Git operations. The model defines the settings. No file is longer than a few hundred lines. You can open any file and immediately know what it does from the filename alone.</p>
+
+  <p>_5.8 <strong>When to split:</strong> If a file is getting past 300 lines, or if you find yourself scrolling to find things, it's time to pull a piece out into its own file. There's no penalty for having more files — Xcode compiles them all the same way. Fewer lines per file means less scrolling, easier debugging, and cleaner git diffs when you change something.</p>
+
+  <h2>6. Targets</h2>
+
+  <p>6.1 The word "target" gets used three different ways in Xcode. All three are related but they mean different things:</p>
+
+  <p>6.2 <strong>1) Build target</strong> — a product that Xcode builds from your project. One project can have multiple build targets, like different assemblies coming off the same production line:</p>
+  <ul>
+    <li><strong>App target</strong> — the actual application</li>
+    <li><strong>Framework target</strong> — a reusable module, like a Swift Package but local to the project</li>
+    <li><strong>Test target</strong> — unit tests and UI tests</li>
+    <li><strong>Widget target</strong> — for WidgetKit extensions</li>
+    <li><strong>App Clip target</strong> — a small, functional slice of your app (under 15MB) that runs instantly when someone scans a QR code, taps an NFC tag, or clicks a link — no install required. Mostly used by businesses with physical-world touchpoints like restaurants or parking meters</li>
+  </ul>
+
+  <p>6.3 <strong>2) Run destination</strong> — the device or simulator you're running the app on. The toolbar at the top of Xcode shows a dropdown where you pick "iPhone 16 Pro" (simulator) or "Michael's iPad mini" (real device). Developers call this the target device. It answers the question "where does this app run when I hit Play?"</p>
+
+  <p>6.4 <strong>3) Deployment target</strong> — the minimum OS version your app supports (the floor we talked about earlier). This tells the App Store which devices are eligible to download your app.</p>
+
+  <p>6.5 When someone says "target" without context, they usually mean the build target — the product being built. But in conversation, all three come up regularly. <em>(See also: Target in the Glossary.)</em></p>
+
+  <p>6.6 Each target has its own build settings, its own Info.plist, and its own source files. A file can belong to multiple targets. To see which targets include a specific file, select the file in the project navigator (left sidebar), then look at the right sidebar under <strong>Target Membership</strong>. You'll see a checkbox for each target in your project. If the box is checked, that file gets compiled into that target. Uncheck it and that target doesn't know the file exists. This is how you can share a utility file between your app and your tests, or exclude test-only code from shipping in your app.</p>
+
+  <h2>7. Schemes</h2>
+
+  <p>7.1 A scheme tells Xcode what to build, how to build it, and where to run it. The scheme picker is at the top-left, next to the Run/Stop buttons.</p>
+
+  <p>7.2 Each scheme defines:</p>
+  <ul>
+    <li><strong>Build</strong> — which targets to compile</li>
+    <li><strong>Run</strong> — which executable to launch and on what device</li>
+    <li><strong>Test</strong> — which test targets to run</li>
+    <li><strong>Profile</strong> — launches Instruments</li>
+    <li><strong>Archive</strong> — builds a release version for App Store submission</li>
+  </ul>
+
+  <p>7.3 <strong>Watch out:</strong> If your app builds but nothing happens when you hit Run, check that the scheme's Executable is set correctly. If tests aren't running, make sure the test target is checked in the scheme's Test section.</p>
+
+  <h2>8. The Build System</h2>
+
+  <p>8.1 When you press Cmd+B or Cmd+R, Xcode does this in order:</p>
+  <p>1) Resolves dependencies — finds Swift Packages, frameworks, linked libraries</p>
+  <p>2) Compiles each <code>.swift</code> file — checks types, concurrency, access control</p>
+  <p>3) Links — combines compiled objects into one executable</p>
+  <p>4) Code-signs — applies your signing certificate</p>
+  <p>5) Copies resources — bundles assets and localization files into the app package</p>
+
+  <p>8.2 Every project ships with two build configurations:</p>
+
+  <p>8.3 <strong>Debug</strong> — unoptimized, has debug symbols, assertions are active. This is what you run during development.</p>
+
+  <p>8.4 <strong>Release</strong> — optimized, stripped down. This is what ships to the App Store.</p>
+
+  <h2>9. Simulators</h2>
+
+  <p>9.1 Simulators let you test without a physical device. They simulate the software, not the hardware. Pick a simulator in the scheme picker and hit Cmd+R.</p>
+
+  <p>9.2 <strong>Available simulators:</strong> Xcode ships with simulators for iPhone, iPad, Apple TV, Apple Watch, CarPlay, and Vision Pro. Each one mimics that platform's screen size, input method, and OS behavior. The Apple Watch simulator pairs with the iPhone simulator automatically. The CarPlay simulator shows your app on a virtual dashboard display. The tvOS simulator uses arrow keys and Return as the Siri Remote.</p>
+
+  <p>9.3 <strong>Managing simulators:</strong> Go to <strong>Window &gt; Devices and Simulators</strong> (Shift+Cmd+2). The Simulators tab shows every virtual device you have. To add a new one — say you need an older iPhone SE to test a smaller screen — click the <strong>+</strong> button at the bottom left. Pick a device type, pick an OS version, give it a name, and it shows up in your scheme picker. You can also delete simulators you never use to declutter the list.</p>
+
+  <p>9.4 <strong>What simulators can't do:</strong> Camera, Bluetooth, real push notifications, actual performance testing, haptics, NFC. If you need any of these, you need the real device.</p>
+
+  <p>9.5 <strong>What they can do:</strong> Different screen sizes, dark mode, Dynamic Type sizes, mock locations, slow network conditions. Good enough for most UI work.</p>
+
+  <p>9.6 <strong>Watch out:</strong> The simulator runs on your Mac's hardware, which is way faster than a phone. Don't let a smooth simulator fool you into thinking your app performs well. Always test on a real device before shipping.</p>
+
+  <p>9.7 If a simulator is stuck or acting weird, reset it: Device &gt; Erase All Content and Settings in the Simulator app.</p>
+
+  <h2>10. Running on Physical Devices</h2>
+
+  <p>10.1 You need:</p>
+
+  <p>10.2 1) An Apple ID signed into Xcode (Xcode &gt; Settings &gt; Accounts). This is the same Apple ID you already use for iCloud, the App Store, and your devices — there's no separate developer account to create. With just your free Apple ID, you can build and run on up to 3 of your own devices, but the apps expire after 7 days. When you're ready to publish to the App Store or use TestFlight, you upgrade to the Apple Developer Program ($99/year) at developer.apple.com — same Apple ID, just an added membership. The device you're building to does NOT have to be signed into your Apple ID. You can build to any device plugged into your Mac, even someone else's phone.</p>
+
+  <p>10.3 2) The device connected via USB or on the same Wi-Fi network</p>
+
+  <p>10.4 3) Developer Mode enabled on the device (Settings &gt; Privacy &amp; Security &gt; Developer Mode)</p>
+
+  <p>10.5 First time: plug in via USB, tap Trust on the device, select it in the scheme picker, build and run. After that you can go wireless — open <strong>Window &gt; Devices and Simulators</strong> (Shift+Cmd+2), select your device, and check "Connect via network." Once enabled, your device shows up in the scheme picker as long as it's on the same Wi-Fi network as your Mac — no cable needed. It's slower than USB for installing builds, but it means you can test on your iPhone across the room without getting up.</p>
+
+  <h2>11. Info.plist</h2>
+
+  <p>_11.1 This is a configuration file that tells the system about your app. Modern Xcode projects sometimes skip the file and put these values in build settings instead. Most of the time, you don't touch Info.plist directly — Xcode manages it through the GUI (select your target, go to the Info tab, add keys there). The main reasons to edit it by hand are adding privacy permission strings quickly or setting obscure keys that Xcode's interface doesn't expose. If you're not sure, use the GUI and let Xcode handle the file.</p>
+
+  <p>11.2 The important keys:</p>
+  <ul>
+    <li><code>CFBundleDisplayName</code> — the name under the app icon</li>
+    <li><code>CFBundleShortVersionString</code> — marketing version like "2.4"</li>
+    <li><code>CFBundleVersion</code> — build number like "1"</li>
+    <li><code>NSCameraUsageDescription</code> — why your app needs the camera</li>
+    <li><code>NSAppleMusicUsageDescription</code> — why your app needs music library access</li>
+  </ul>
+
+  <p>_11.3 <strong>Privacy usage descriptions are mandatory.</strong> If your app touches a protected resource — camera, microphone, location, photos, health, music library, calendar, or the downloads folder — you must explain why. Skip it and the app crashes at runtime or Apple rejects it. If your app is crashing and you can't figure out why, check this first — a missing privacy description is one of the most common causes. The app doesn't give you a helpful error message, it just dies the moment it tries to access the resource it doesn't have permission for. It goes the other way too — if you declare a permission but Apple's reviewers can't see your app actually using it, they'll pause or reject your review. Don't declare permissions you don't need, and if you do use them, make sure the result is visible to the user. Asking for location access but never showing a map or location-based content looks suspicious to a reviewer.</p>
+
+  <h2>12. Entitlements</h2>
+
+  <p>12.1 Entitlements declare what system capabilities your app can use. They live in a <code>.entitlements</code> file.</p>
+  <ul>
+    <li>iCloud, HealthKit, MusicKit, WeatherKit, push notifications — all require entitlements.</li>
+  </ul>
+
+  <p>12.2 To add one: select your project, select the target, go to Signing &amp; Capabilities, click "+ Capability," search and add.</p>
+
+  <p>12.3 <strong>Watch out:</strong> MusicKit, WeatherKit, and ShazamKit must also be enabled in App Services on developer.apple.com. The Xcode checkbox alone is not enough. Go to Certificates, Identifiers &amp; Profiles &gt; Identifiers &gt; select your app &gt; App Services tab.</p>
+
+  <h2>13. Code Signing</h2>
+
+  <p>13.1 Code signing proves the app came from you and hasn't been tampered with. Under Signing &amp; Capabilities, check "Automatically manage signing" and pick your Team. Xcode handles the rest — certificates, provisioning profiles, device registration.</p>
+
+  <p>13.2 <strong>Watch out:</strong> "No signing certificate found" — go to Xcode &gt; Settings &gt; Accounts, select your team, click Manage Certificates, create a new one. If provisioning profile errors won't go away, delete the old profile from <code>~/Library/MobileDevice/Provisioning Profiles/</code> and let Xcode regenerate it.</p>
+
+  <h2>14. App Store Connect</h2>
+
+  <p>_14.1 App Store Connect is where you manage your apps after they're built. It's separate from the developer portal. This section covers the basics — for the full picture (pricing, TestFlight, App Review, screenshots, analytics, export compliance, and everything else), see <a href="chapter23.xhtml">Chapter 23: The Apple Developer Program and App Store</a>.</p>
+
+  <p>_14.2 <strong>Before you archive, check these in the project navigator:</strong> Select your project (the blue icon at the top of the file tree), then select your app target. Under <strong>Signing &amp; Capabilities</strong>, verify your Team is set and signing is working (no red errors). Under <strong>General</strong>, check:</p>
+  <ul>
+    <li><strong>Display Name</strong> — the name shown under the app icon on the Home Screen</li>
+    <li><strong>Bundle Identifier</strong> — must match what's registered in App Store Connect</li>
+    <li><strong>Version</strong> — the marketing version number (e.g., "2.4") — must be higher than the last App Store release</li>
+    <li><strong>Build</strong> — the build number (e.g., "1") — must be unique for this version. If build 1 gets rejected, upload build 2 with the same version number</li>
+  </ul>
+
+  <p>_14.3 <strong>Uploading a build:</strong></p>
+  <p>1) In the scheme picker, select your app target and set the destination to "Any iOS Device" (not a simulator — Archive is greyed out if a simulator is selected)</p>
+  <p>2) Product &gt; Archive — Xcode builds a release version and opens the Organizer</p>
+  <p>3) Select your archive, click Distribute App, choose App Store Connect</p>
+  <p>4) Follow the prompts — Xcode validates, signs, and uploads the build</p>
+
+  <p>_14.4 The build shows up in App Store Connect after 5-30 minutes of processing. Apple runs automated checks during this time — if something's wrong with your signing, entitlements, or privacy manifest, you'll get an email about it before the build even appears.</p>
+
+  <h2>15. Keyboard Shortcuts</h2>
+
+  <p>15.1 The ones you'll actually use:</p>
+  <ul>
+    <li><strong>Cmd+R</strong> — Build and Run</li>
+    <li><strong>Cmd+B</strong> — Build only</li>
+    <li><strong>Cmd+.</strong> — Stop running app</li>
+    <li><strong>Cmd+Shift+K</strong> — Clean build folder</li>
+    <li><strong>Cmd+Shift+O</strong> — Open Quickly (jump to any file or symbol)</li>
+    <li><strong>Cmd+/</strong> — Toggle comment on selected lines</li>
+    <li><strong>Cmd+Ctrl+E</strong> — Rename a variable everywhere in scope</li>
+    <li><strong>Ctrl+I</strong> — Re-indent selected code</li>
+  </ul>
+
+  <h2>16. Tips</h2>
+
+  <p>16.1 <strong>Clean builds fix weird issues.</strong> Shift+Cmd+K clears cached compilation artifacts. Try this before you start debugging something that doesn't make sense.</p>
+
+  <p>16.2 <strong>Derived Data is Xcode's cache.</strong> It lives at <code>~/Library/Developer/Xcode/DerivedData/</code>. If Xcode is acting truly bizarre — phantom errors, previews refusing to load — delete this folder and rebuild. Safe to delete. Xcode recreates it.</p>
+
+  <p>16.3 <strong>Restart Xcode more than you think you should.</strong> The indexing and preview systems accumulate state. A fresh restart clears it.</p>
+
+  <p>16.4 <strong>Use Open Quickly constantly.</strong> Cmd+Shift+O is faster than clicking through the file tree for any project bigger than a handful of files.</p>
+
+  <h2>17. Your First Run — QuickNote in Action</h2>
+
+  <p>_17.1 If you haven't already, build and run QuickNote (Cmd+R). Pick the iPhone 16e simulator or your own device. Xcode compiles the code, boots the simulator, and launches the app. You should see an empty list (Fig. 1.16).</p>
+
+  <figure>
+    <img src="figures/ch01/fig-1-16-quicknote-empty-list.png" alt="QuickNote: Empty List" style="max-width:100%;" />
+    <figcaption>Fig. 1.16 — QuickNote: Empty List</figcaption>
+  </figure>
+
+  <p>_17.2 You're looking at an empty list. That's the <code>NavigationSplitView</code> from ContentView.swift — a container that puts a list on one side and detail on the other. On iPhone, you see just the list. On iPad or Mac, you'd see both side by side.</p>
+
+  <figure>
+    <img src="figures/ch01/fig-1-17-quicknote-toolbar.png" alt="QuickNote: Toolbar with + and Edit" style="max-width:100%;" />
+    <figcaption>Fig. 1.17 — QuickNote: Toolbar with + and Edit</figcaption>
+  </figure>
+
+  <p>_17.3 Notice the <strong>+</strong> button and the <strong>Edit</strong> button at the top (Fig. 1.17). Those came from the <code>.toolbar</code> block in the code. The + button calls <code>addItem()</code> — a function that creates a new Item with the current timestamp and saves it to SwiftData. Tap it.</p>
+
+  <figure>
+    <img src="figures/ch01/fig-1-18-quicknote-item-added.png" alt="QuickNote: Item Added" style="max-width:100%;" />
+    <figcaption>Fig. 1.18 — QuickNote: Item Added</figcaption>
+  </figure>
+
+  <p>_17.4 An item appeared (Fig. 1.18) — "4/6/2026, 11:12:08". That's the <code>Item</code> model's <code>timestamp</code> property, formatted as a date. The <code>ForEach(items)</code> loop in the code drew one row for each item in the database. Right now there's one item, so there's one row. Tap the + again and you'd get a second row. Every row is the same code running again with different data — that's what loops do.</p>
+
+  <p>_17.5 Tap the item.</p>
+
+  <figure>
+    <img src="figures/ch01/fig-1-19-quicknote-detail-view.png" alt="QuickNote: Detail View" style="max-width:100%;" />
+    <figcaption>Fig. 1.19 — QuickNote: Detail View</figcaption>
+  </figure>
+
+  <p>_17.6 You navigated to the detail view (Fig. 1.19) — "Item at 4/6/2026, 11:12:08" centered on screen, with a back arrow to return. That's the <code>NavigationLink</code> from the code — it says "when the user taps this row, show them this view." The destination is just a <code>Text()</code> displaying the timestamp. Simple, but the navigation pattern is real — every list-to-detail app works this way.</p>
+
+  <p>_17.7 Go back and tap <strong>Edit</strong>.</p>
+
+  <figure>
+    <img src="figures/ch01/fig-1-20-quicknote-edit-mode.png" alt="QuickNote: Edit Mode" style="max-width:100%;" />
+    <figcaption>Fig. 1.20 — QuickNote: Edit Mode</figcaption>
+  </figure>
+
+  <p>_17.8 Red delete circles appeared (Fig. 1.20). That's the <code>EditButton()</code> in the toolbar and the <code>.onDelete</code> modifier on the <code>ForEach</code>. Swipe left on a row or tap the red circle to delete an item. SwiftData removes it from the database and SwiftUI removes the row from the list — automatically, because the <code>@Query</code> is watching for changes.</p>
+
+  <p>_17.9 You just saw the entire template app work: create, list, navigate, delete. All from about 50 lines of code that Xcode wrote for you. Right now it stores timestamps, which isn't useful. In <a href="chapter02.xhtml">Chapter 2</a>, we'll take that code apart line by line — what <code>struct</code> means, what <code>body</code> does, how modifiers work, and why the Inspector panel and the code are two views of the same thing. By the end of Chapter 2, QuickNote will store actual notes instead of timestamps.</p>
+
+  <hr/>
+  <p><em>Claude's Xcode 26 Swift Bible — Chapter 1</em><br/>
+  <em>By Dr. Wahl — co-authored by Claude A. and Michael Fluharty. Swift 6, Xcode 26.</em></p>
+</body>
+</html>

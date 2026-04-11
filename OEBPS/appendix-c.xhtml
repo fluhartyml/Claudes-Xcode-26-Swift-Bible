@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Appendix C: Apple Frameworks &amp; Kits Reference</title>
+  <link rel="stylesheet" type="text/css" href="styles.css"/>
+</head>
+<body>
+  <h1>Appendix C: Apple Frameworks &amp; Kits Reference</h1>
+  <p><em>Claude's Xcode 26 Swift Bible</em></p>
+  <p>Each kit listed here gets a comprehensive explanation — what it does, why you'd use it, what entitlements or permissions it requires, and which chapter covers it in detail. This appendix grows as chapters are written.</p>
+
+  <hr/>
+
+  <h2 id="app-intents">App Intents</h2>
+  <p><strong>What it does:</strong> Lets your app integrate with Siri, Shortcuts, Spotlight, and Apple Intelligence. You define "intents" — actions your app can perform — and the system surfaces them to the user through voice commands, suggestions, and the Shortcuts app.</p>
+  <p><strong>Introduced:</strong> WWDC 2022 (iOS 16)</p>
+  <p><strong>Replaces:</strong> SiriKit intents for new development</p>
+  <p><strong>Entitlement required:</strong> No</p>
+  <p><strong>Privacy description required:</strong> No (but the actions your intent triggers may require permissions)</p>
+  <p><strong>developer.apple.com setup:</strong> No</p>
+  <p><strong>Covered in:</strong> TBD</p>
+
+  <hr/>
+
+  <h2 id="cloudkit">CloudKit</h2>
+  <p><strong>What it does:</strong> Syncs data across a user's devices via iCloud. Public databases let all users of your app share data. Private databases sync a single user's data across their iPhone, iPad, Mac, and Apple TV.</p>
+  <p><strong>Introduced:</strong> WWDC 2014 (iOS 8)</p>
+  <p><strong>Entitlement required:</strong> Yes — iCloud container identifier</p>
+  <p><strong>Privacy description required:</strong> No</p>
+  <p><strong>developer.apple.com setup:</strong> Yes — enable iCloud under App Services, create a CloudKit container</p>
+  <p><strong>Free tier:</strong> Generous — 1GB asset storage, 100MB database, 2GB transfer per user</p>
+  <p><strong>Covered in:</strong> TBD</p>
+
+  <hr/>
+
+  <h2 id="core-data">Core Data</h2>
+  <p><strong>What it does:</strong> Apple's original on-device persistence framework. Object graph management with SQLite backing. Handles relationships, migrations, undo/redo, and lazy loading.</p>
+  <p><strong>Introduced:</strong> 2005 (Mac OS X Tiger)</p>
+  <p><strong>Status:</strong> Still supported, but SwiftData is the modern replacement</p>
+  <p><strong>Entitlement required:</strong> No (unless syncing via CloudKit)</p>
+  <p><strong>Covered in:</strong> Ch 15</p>
+
+  <hr/>
+
+  <h2 id="core-location">Core Location</h2>
+  <p><strong>What it does:</strong> GPS, Wi-Fi, and Bluetooth-based location services. Current location, geofencing, heading, visit monitoring, and significant location changes.</p>
+  <p><strong>Introduced:</strong> 2008 (iPhone OS 2)</p>
+  <p><strong>Entitlement required:</strong> No</p>
+  <p><strong>Privacy description required:</strong> Yes — NSLocationWhenInUseUsageDescription and/or NSLocationAlwaysAndWhenInUseUsageDescription</p>
+  <p><strong>developer.apple.com setup:</strong> No</p>
+  <p><strong>Covered in:</strong> TBD</p>
+
+  <hr/>
+
+  <h2 id="foundation-models">Foundation Models Framework</h2>
+  <p><strong>What it does:</strong> Direct access to Apple's on-device large language models. Text generation, summarization, and other LLM tasks — entirely on-device, no internet required.</p>
+  <p><strong>Introduced:</strong> WWDC 2025 (iOS 26)</p>
+  <p><strong>Entitlement required:</strong> No</p>
+  <p><strong>Privacy description required:</strong> No</p>
+  <p><strong>developer.apple.com setup:</strong> No</p>
+  <p><strong>Covered in:</strong> TBD</p>
+
+  <hr/>
+
+  <h2 id="gamekit">GameKit</h2>
+  <p><strong>What it does:</strong> Game Center integration — leaderboards, achievements, matchmaking, player authentication, challenges. Works across all Apple platforms.</p>
+  <p><strong>Introduced:</strong> 2010 (iOS 4)</p>
+  <p><strong>Entitlement required:</strong> Yes — Game Center capability</p>
+  <p><strong>Privacy description required:</strong> No</p>
+  <p><strong>developer.apple.com setup:</strong> Yes — configure Game Center in App Store Connect</p>
+  <p><strong>Covered in:</strong> TBD</p>
+
+  <hr/>
+
+  <h2 id="healthkit">HealthKit</h2>
+  <p><strong>What it does:</strong> Read and write health and fitness data — steps, heart rate, sleep, nutrition, workouts, medications. Shared health data store across all apps that have permission.</p>
+  <p><strong>Introduced:</strong> WWDC 2014 (iOS 8)</p>
+  <p><strong>Entitlement required:</strong> Yes — HealthKit capability</p>
+  <p><strong>Privacy description required:</strong> Yes — NSHealthShareUsageDescription (read) and NSHealthUpdateUsageDescription (write)</p>
+  <p><strong>developer.apple.com setup:</strong> No</p>
+  <p><strong>Platforms:</strong> iPhone and Apple Watch only (not iPad, not Mac)</p>
+  <p><strong>Covered in:</strong> TBD</p>
+
+  <hr/>
+
+  <h2 id="homekit">HomeKit</h2>
+  <p><strong>What it does:</strong> Smart home device control. Lights, locks, thermostats, cameras. Bridges to Matter and Thread protocols. Automations and scenes.</p>
+  <p><strong>Introduced:</strong> WWDC 2014 (iOS 8)</p>
+  <p><strong>Entitlement required:</strong> Yes — HomeKit capability</p>
+  <p><strong>Privacy description required:</strong> Yes — NSHomeKitUsageDescription</p>
+  <p><strong>developer.apple.com setup:</strong> No</p>
+  <p><strong>Covered in:</strong> TBD</p>
+
+  <hr/>
+
+  <h2 id="mapkit">MapKit</h2>
+  <p><strong>What it does:</strong> Embed Apple Maps in your app. Annotations, overlays, directions, search, Look Around (street-level imagery). Works on all Apple platforms.</p>
+  <p><strong>Introduced:</strong> 2009 (iPhone OS 3)</p>
+  <p><strong>Entitlement required:</strong> No</p>
+  <p><strong>Privacy description required:</strong> Only if using Core Location for the user's position</p>
+  <p><strong>developer.apple.com setup:</strong> No</p>
+  <p><strong>Covered in:</strong> TBD</p>
+
+  <hr/>
+
+  <h2 id="musickit">MusicKit</h2>
+  <p><strong>What it does:</strong> Access the Apple Music catalog (80+ million songs) and the user's personal music library. Search, playback, playlists, album art, now playing info.</p>
+  <p><strong>Introduced:</strong> WWDC 2021 (iOS 15) — Swift-native rewrite of the older MediaPlayer/StoreKit approach</p>
+  <p><strong>Entitlement required:</strong> Yes — MusicKit capability</p>
+  <p><strong>Privacy description required:</strong> Yes — NSAppleMusicUsageDescription</p>
+  <p><strong>developer.apple.com setup:</strong> Yes — must enable MusicKit under App Services in Certificates, Identifiers &amp; Profiles. The Xcode checkbox alone is not enough.</p>
+  <p><strong>Covered in:</strong> TBD</p>
+
+  <hr/>
+
+  <h2 id="shazamkit">ShazamKit</h2>
+  <p><strong>What it does:</strong> Audio recognition. Match audio against Shazam's catalog (identify songs) or against your own custom audio signatures (match specific audio content).</p>
+  <p><strong>Introduced:</strong> WWDC 2021 (iOS 15)</p>
+  <p><strong>Entitlement required:</strong> No</p>
+  <p><strong>Privacy description required:</strong> Yes — NSMicrophoneUsageDescription (if listening through the mic)</p>
+  <p><strong>developer.apple.com setup:</strong> Yes — enable ShazamKit under App Services</p>
+  <p><strong>Covered in:</strong> TBD</p>
+
+  <hr/>
+
+  <h2 id="sirikit">SiriKit</h2>
+  <p><strong>What it does:</strong> Voice assistant integration through predefined intent domains — messaging, payments, workouts, ride booking, photo search, and more. Your app handles Siri requests in specific categories.</p>
+  <p><strong>Introduced:</strong> WWDC 2016 (iOS 10)</p>
+  <p><strong>Status:</strong> Still available, but App Intents is the modern replacement for new development</p>
+  <p><strong>Entitlement required:</strong> Yes — Siri capability</p>
+  <p><strong>Privacy description required:</strong> Yes — NSSiriUsageDescription</p>
+  <p><strong>developer.apple.com setup:</strong> No</p>
+  <p><strong>Covered in:</strong> TBD</p>
+  <p><em>See also:</em> <a href="#app-intents">App Intents</a></p>
+
+  <hr/>
+
+  <h2 id="spritekit">SpriteKit</h2>
+  <p><strong>What it does:</strong> 2D game engine. Sprites, physics simulation, particle effects, scene transitions, tile maps. Runs on all Apple platforms including Apple TV.</p>
+  <p><strong>Introduced:</strong> WWDC 2013 (iOS 7)</p>
+  <p><strong>Entitlement required:</strong> No</p>
+  <p><strong>Privacy description required:</strong> No</p>
+  <p><strong>developer.apple.com setup:</strong> No</p>
+  <p><strong>Covered in:</strong> TBD</p>
+
+  <hr/>
+
+  <h2 id="storekit">StoreKit</h2>
+  <p><strong>What it does:</strong> In-app purchases, subscriptions, and transaction management. StoreKit 2 (introduced WWDC 2021) is the modern async/await API. Test purchases locally with StoreKit configuration files in Xcode — no App Store Connect setup needed for testing.</p>
+  <p><strong>Introduced:</strong> 2009 (iPhone OS 3); StoreKit 2 at WWDC 2021</p>
+  <p><strong>Entitlement required:</strong> Yes — In-App Purchase capability</p>
+  <p><strong>Privacy description required:</strong> No</p>
+  <p><strong>developer.apple.com setup:</strong> Yes — configure products in App Store Connect</p>
+  <p><strong>Covered in:</strong> TBD</p>
+
+  <hr/>
+
+  <h2 id="swiftdata">SwiftData</h2>
+  <p><strong>What it does:</strong> Apple's modern persistence framework. Define models with the @Model macro, query with #Predicate, and let SwiftData handle the SQLite database underneath. Integrates natively with SwiftUI.</p>
+  <p><strong>Introduced:</strong> WWDC 2023 (iOS 17)</p>
+  <p><strong>Replaces:</strong> Core Data for new projects</p>
+  <p><strong>Entitlement required:</strong> No (unless syncing via CloudKit)</p>
+  <p><strong>Privacy description required:</strong> No</p>
+  <p><strong>developer.apple.com setup:</strong> No</p>
+  <p><strong>Covered in:</strong> Ch 15</p>
+
+  <hr/>
+
+  <h2 id="weatherkit">WeatherKit</h2>
+  <p><strong>What it does:</strong> Current weather conditions, hourly and daily forecasts, severe weather alerts, historical weather data. Powered by Apple Weather.</p>
+  <p><strong>Introduced:</strong> WWDC 2022 (iOS 16)</p>
+  <p><strong>Entitlement required:</strong> Yes — WeatherKit capability</p>
+  <p><strong>Privacy description required:</strong> No (but Core Location permission is needed to get weather for the user's location)</p>
+  <p><strong>developer.apple.com setup:</strong> Yes — must enable WeatherKit under App Services. The Xcode checkbox alone is not enough.</p>
+  <p><strong>Free tier:</strong> 500,000 API calls per month included with Apple Developer Program membership</p>
+  <p><strong>Attribution required:</strong> Yes — Apple requires a  Weather attribution link in your app</p>
+  <p><strong>Covered in:</strong> TBD</p>
+
+  <hr/>
+
+  <h2 id="webkit">WebKit</h2>
+  <p><strong>What it does:</strong> Embed web content in your app. WKWebView (UIKit) or the new SwiftUI WebView (introduced WWDC 2025). Same rendering engine as Safari. JavaScript evaluation, navigation delegation, cookie management.</p>
+  <p><strong>Introduced:</strong> 2003 (Safari 1.0); WKWebView in 2014; SwiftUI WebView in 2025</p>
+  <p><strong>Entitlement required:</strong> No</p>
+  <p><strong>Privacy description required:</strong> No</p>
+  <p><strong>developer.apple.com setup:</strong> No</p>
+  <p><strong>Covered in:</strong> TBD</p>
+
+  <hr/>
+
+  <h2 id="widgetkit">WidgetKit</h2>
+  <p><strong>What it does:</strong> Home Screen, Lock Screen, and StandBy widgets. Timeline-based — your app provides data snapshots at intervals, the system displays them. Interactive widgets (buttons, toggles) added in iOS 17.</p>
+  <p><strong>Introduced:</strong> WWDC 2020 (iOS 14); interactive widgets WWDC 2023</p>
+  <p><strong>Entitlement required:</strong> No (just add a Widget Extension target)</p>
+  <p><strong>Privacy description required:</strong> No</p>
+  <p><strong>developer.apple.com setup:</strong> No</p>
+  <p><strong>Covered in:</strong> TBD</p>
+
+  <hr/>
+
+  <h2 id="writing-tools">Writing Tools</h2>
+  <p><strong>What it does:</strong> System-level text rewriting, proofreading, and summarization. Automatically available in any standard text field (UITextField, UITextView, SwiftUI TextField/TextEditor). Part of Apple Intelligence.</p>
+  <p><strong>Introduced:</strong> WWDC 2024 (iOS 18)</p>
+  <p><strong>Entitlement required:</strong> No</p>
+  <p><strong>Privacy description required:</strong> No</p>
+  <p><strong>developer.apple.com setup:</strong> No</p>
+  <p><strong>Opt-out:</strong> You can disable Writing Tools on specific text fields if needed (e.g., password fields)</p>
+  <p><strong>Covered in:</strong> TBD</p>
+
+  <hr/>
+  <p><em>This appendix will be updated as new kits are covered in the chapters.</em></p>
+</body>
+</html>

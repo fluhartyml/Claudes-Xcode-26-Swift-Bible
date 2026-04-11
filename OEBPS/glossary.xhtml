@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Glossary</title>
+  <link rel="stylesheet" type="text/css" href="styles.css"/>
+</head>
+<body>
+  <h1>Glossary</h1>
+  <p><em>Claude's Xcode 26 Swift Bible</em></p>
+
+  <h2 id="app-clip">App Clip</h2>
+  <p>A small, lightweight piece of your app (under 15MB) that someone can use instantly without installing the full app. The user scans a QR code, taps an NFC tag, or clicks a link, and a functional slice of your app launches on the spot — no App Store download, no install. Think of it like scanning a code at a restaurant and immediately getting an ordering screen. If the user likes it, they can install the full app from there. Mostly used by businesses with physical-world touchpoints like restaurants, parking meters, and scooter rentals. Most solo developers don't need one.</p>
+
+  <h2 id="arc">ARC (Automatic Reference Counting)</h2>
+  <p>Swift's memory management system. It counts how many things are using an object. When nothing needs it anymore, ARC cleans it up automatically. No manual memory allocation or deallocation needed.</p>
+
+  <h2 id="class">Class</h2>
+  <p>A container for data and behavior, like a struct, but with one key difference: a class is a <strong>reference type</strong>. When you pass a class instance to a function or assign it to another variable, everyone shares the same object — they're all pointing to the same thing in memory. Change it in one place, it changes everywhere. This makes classes useful when you need shared state (like an <code>@Observable</code> data model that multiple views read from). The tradeoff is more complexity — you have to think about who's modifying the object and when. Structs are simpler and preferred in Swift unless you specifically need reference semantics.</p>
+
+  <h2 id="computed-property">Computed Property</h2>
+  <p>A property that runs code every time you read it, instead of storing a fixed value. A stored property is like a box with a value sitting in it: <code>var name = "Michael"</code>. A computed property is like asking a question — it calculates the answer fresh each time: <code>var greeting: String { return "Hello, \(name)" }</code>. In SwiftUI, <code>body</code> is a computed property because the framework needs to ask "what should this view look like right now?" every time something changes.</p>
+
+  <h2 id="compiled">Compiled Language</h2>
+  <p>A language where your source code gets translated into machine code before it runs. The translation happens once at build time, not every time the program runs. Swift is compiled. Python and JavaScript are interpreted — they translate on the fly, which is slower.</p>
+
+  <h2 id="git">Git</h2>
+  <p>A version control system that tracks changes to your code over time. Every save point is called a "commit." You can go back to any previous commit, branch off to try something new, and merge changes together. Created by Linus Torvalds in 2005 (the same person who created Linux). Git runs locally on your Mac — it doesn't need the internet.</p>
+
+  <h2 id="github">GitHub</h2>
+  <p>A website (github.com) that hosts Git repositories online. It's like a cloud backup for your code, but it also adds collaboration tools — pull requests, issues, wikis, and GitHub Pages for free websites. Owned by Microsoft since 2018. Your code on GitHub can be public (anyone can see it) or private (only you and people you invite). Git is the tool. GitHub is the service that stores your Git repos online.</p>
+
+  <h2 id="ide">IDE (Integrated Development Environment)</h2>
+  <p>A program that combines a code editor, build tools, debugger, and other development tools into one application. Xcode is Apple's IDE.</p>
+
+  <h2 id="info-plist">Info.plist</h2>
+  <p>A configuration file that tells the system about your app before it even launches. It's where you declare things like your app's display name, what permissions it needs (camera, microphone, location), which orientations it supports, and what URL schemes it handles. Think of it as the label on the outside of the box — the system reads it to know what's inside without opening the app. Every target has its own Info.plist because each product may need different permissions or settings.</p>
+
+  <h2 id="int">Int (Integer)</h2>
+  <p>Short for Integer. A whole number with no decimal point. Examples: <code>0</code>, <code>42</code>, <code>-7</code>, <code>1000000</code>. In Swift, <code>Int</code> is the default type for whole numbers. It's 64-bit on modern Apple hardware, meaning it can hold numbers up to about 9.2 quintillion.</p>
+
+  <h2 id="machine-code">Machine Code</h2>
+  <p>The lowest-level instructions that a processor (CPU) actually executes. It's binary — ones and zeros. Humans don't write machine code directly. You write Swift, the compiler translates it into machine code, and the processor runs that. This is why compiled languages run fast — the translation is already done before the app launches.</p>
+
+  <h2 id="remote-repository">Remote Repository</h2>
+  <p>A copy of your <a href="#git">Git</a> repository stored on a server somewhere else — usually <a href="#github">GitHub</a>. Your Mac has the local copy, GitHub has the remote copy. You "push" to send your changes up and "pull" to bring changes down. Think of it like saving a document to iCloud — the file exists on your Mac and in the cloud. If your Mac dies, the remote still has your code.</p>
+
+  <h2 id="repository">Repository (Repo)</h2>
+  <p>A folder that <a href="#git">Git</a> is tracking. It contains your code plus a hidden <code>.git</code> folder that stores the entire history of every change ever made. You can have a local repo on your Mac, a remote repo on GitHub, or both.</p>
+
+  <h2 id="normalization">Normalization</h2>
+  <p>Literally: to make normal. Take a sporadic jumble and organize it so everything has a place and nothing is duplicated. The term originates from database normalization (Edgar F. Codd, IBM, 1970) — each concept gets its own table, no data is repeated across tables. In code, the same principle means each file handles one responsibility: one view per file, models in their own folder, services separate from UI. The opposite of normalization is a **monolithic** file — one giant file with everything piled together. It works until it doesn't, and then you can't find anything or change anything without breaking something else.</p>
+
+  <h2 id="persistence">Persistence</h2>
+  <p>Saving information so it survives after the app closes. Without persistence, everything your app knows disappears when the user quits — like a whiteboard that gets erased every night. With persistence, things like user settings, journal entries, saved documents, and favorites are written to disk and loaded back the next time the app opens. SwiftData, Core Data, UserDefaults, and saving files to the file system are all forms of persistence. CloudKit takes it further by syncing that saved information across the user's devices.</p>
+
+  <h2 id="protocol">Protocol</h2>
+  <p>A contract that defines what a type must be able to do, without saying how it does it. Think of it like a job description — it lists the requirements, but each person who fills the role does the work their own way. In Swift, a type "conforms" to a protocol by implementing everything the protocol requires.</p>
+
+  <h2 id="struct">Struct (Structure)</h2>
+  <p>A lightweight container that bundles data and behavior together as a single unit. In Swift, most of what you build is a struct — your views, your data models, your custom types. Unlike a class, a struct is a value type: when you pass it to a function or assign it to another variable, Swift makes a copy instead of sharing the original. SwiftUI views are structs because they're meant to be cheap, disposable descriptions of what the screen should look like — SwiftUI creates and destroys them constantly.</p>
+
+  <h2 id="string">String</h2>
+  <p>Text. A sequence of characters — letters, numbers, symbols, spaces, emojis. In Swift, Strings are wrapped in double quotes: <code>"Hello"</code>, <code>"CryoTunes Player"</code>, <code>"42"</code>. Note that <code>"42"</code> as a String is text, not a number — you can't do math with it until you convert it to an <code><a href="#int">Int</a></code>.</p>
+
+  <h2 id="target">Target</h2>
+  <p>A word with three meanings in Xcode. <strong>Build target:</strong> a product your project builds (an app, a test suite, a widget extension — one project can build several). <strong>Run destination:</strong> the device or simulator you run the app on (the dropdown in the Xcode toolbar). <strong>Deployment target:</strong> the minimum OS version your app supports — the floor that determines who can download it from the App Store. Context usually makes it clear which one someone means.</p>
+
+  <h2 id="view">View</h2>
+  <p>Anything that can be drawn on screen in SwiftUI. A text label is a View. A button is a View. A whole screen is a View made of smaller Views. Every View is a struct with a <code>body</code> property that describes what it looks like. SwiftUI calls <code>body</code> whenever it needs to know the current appearance, and only redraws the parts that actually changed.</p>
+
+  <h2 id="view-protocol">View Protocol</h2>
+  <p>The contract a struct must fulfill to be drawn on screen by SwiftUI. It has one requirement: a computed property called <code>body</code> that returns <code>some View</code>. When you write <code>struct MyScreen: View</code>, you're telling Swift "this struct can be displayed as part of the user interface." The View protocol is what connects your code to SwiftUI's rendering engine.</p>
+
+  <h2 id="type-safe">Type-safe</h2>
+  <p>A language where the compiler checks that you're using the right kind of data in the right place. You can't accidentally treat text as a number or a number as a list. The compiler catches these mistakes before your code runs, not after.</p>
+
+</body>
+</html>

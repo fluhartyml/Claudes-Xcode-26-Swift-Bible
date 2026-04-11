@@ -1,0 +1,67 @@
+@font-face {
+    font-family: 'FiraCode Nerd Font';
+    src: url('FiraCodeNerdFont-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'FiraCode Nerd Font';
+    src: url('FiraCodeNerdFont-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+body {
+    font-family: 'FiraCode Nerd Font', monospace;
+    font-size: 18pt;
+    line-height: 1.6;
+    margin: 2em;
+    color: #1a1a1a;
+}
+h1 {
+    font-family: 'FiraCode Nerd Font', monospace;
+    font-size: 28pt;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+    color: #333;
+}
+h2 {
+    font-family: 'FiraCode Nerd Font', monospace;
+    font-size: 22pt;
+    font-weight: bold;
+    margin-top: 1.5em;
+    color: #444;
+}
+p {
+    margin-bottom: 1em;
+    text-align: justify;
+}
+code {
+    font-family: 'FiraCode Nerd Font', monospace;
+    font-size: 16pt;
+    background-color: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+pre {
+    font-family: 'FiraCode Nerd Font', monospace;
+    font-size: 16pt;
+    background-color: #f0f0f0;
+    padding: 1em;
+    border-radius: 6px;
+    overflow-x: auto;
+    line-height: 1.4;
+}
+figure {
+    margin: 1.5em 0;
+    text-align: center;
+}
+figure img {
+    width: 100%;
+    border-radius: 6px;
+}
+figcaption {
+    font-size: 14pt;
+    color: #888;
+    margin-top: 0.5em;
+    font-style: italic;
+}

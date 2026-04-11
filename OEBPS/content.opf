@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="bookid">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <dc:identifier id="bookid">claudes-xcode-26-swift-bible</dc:identifier>
+    <dc:title>Claude's Xcode 26 Swift Bible — Build 6</dc:title>
+    <dc:creator>Dr. Wahl, co-authored by Claude A. and Michael Fluharty</dc:creator>
+    <dc:language>en</dc:language>
+    <dc:date>2026</dc:date>
+    <dc:description>A living Swift and SwiftUI reference for AppleOS development. Structured after the Delphi 4 Bible by Tom Swan.</dc:description>
+    <meta property="dcterms:modified">2026-04-06T00:00:00Z</meta>
+  </metadata>
+  <manifest>
+    <item id="toc" href="toc.xhtml" media-type="application/xhtml+xml" properties="nav"/>
+    <item id="style" href="styles.css" media-type="text/css"/>
+    <item id="font-regular" href="FiraCodeNerdFont-Regular.ttf" media-type="font/ttf"/>
+    <item id="font-bold" href="FiraCodeNerdFont-Bold.ttf" media-type="font/ttf"/>
+    <item id="ch01" href="chapter01.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch02" href="chapter02.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch03" href="chapter03.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch04" href="chapter04.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch05" href="chapter05.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch06" href="chapter06.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch07" href="chapter07.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch08" href="chapter08.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch09" href="chapter09.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch10" href="chapter10.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch11" href="chapter11.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch12" href="chapter12.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch13" href="chapter13.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch14" href="chapter14.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch15" href="chapter15.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch16" href="chapter16.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch17" href="chapter17.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch18" href="chapter18.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch19" href="chapter19.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch20" href="chapter20.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch21" href="chapter21.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch22" href="chapter22.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch23" href="chapter23.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ch24" href="chapter24.xhtml" media-type="application/xhtml+xml"/>
+    <item id="appendix-a" href="appendix.xhtml" media-type="application/xhtml+xml"/>
+    <item id="appendix-b" href="appendix-b.xhtml" media-type="application/xhtml+xml"/>
+    <item id="appendix-c" href="appendix-c.xhtml" media-type="application/xhtml+xml"/>
+    <item id="glossary" href="glossary.xhtml" media-type="application/xhtml+xml"/>
+    <item id="index" href="index.xhtml" media-type="application/xhtml+xml"/>
+    <item id="fig_1_1_xcode_welcome_screen" href="figures/ch01/fig-1-1-xcode-welcome-screen.png" media-type="image/png"/>
+    <item id="fig_1_2_template_picker" href="figures/ch01/fig-1-2-template-picker.png" media-type="image/png"/>
+    <item id="fig_1_3_project_options_blank" href="figures/ch01/fig-1-3-project-options-blank.png" media-type="image/png"/>
+    <item id="fig_1_4_project_options_quicknote" href="figures/ch01/fig-1-4-project-options-quicknote.png" media-type="image/png"/>
+    <item id="fig_1_5_xcode_workspace" href="figures/ch01/fig-1-5-xcode-workspace.png" media-type="image/png"/>
+    <item id="fig_1_6_source_control_changes" href="figures/ch01/fig-1-6-source-control-changes.png" media-type="image/png"/>
+    <item id="fig_1_7_source_control_repositories" href="figures/ch01/fig-1-7-source-control-repositories.png" media-type="image/png"/>
+    <item id="fig_1_8_simulator_booting" href="figures/ch01/fig-1-8-simulator-booting.png" media-type="image/png"/>
+    <item id="fig_1_9_create_remote_github" href="figures/ch01/fig-1-9-create-remote-github.png" media-type="image/png"/>
+    <item id="fig_1_10_save_dialog_new_folder" href="figures/ch01/fig-1-10-save-dialog-new-folder.png" media-type="image/png"/>
+    <item id="fig_1_11_save_dialog_location" href="figures/ch01/fig-1-11-save-dialog-location.png" media-type="image/png"/>
+    <item id="fig_1_12_general_tab" href="figures/ch01/fig-1-12-general-tab.png" media-type="image/png"/>
+    <item id="fig_1_13_general_tab_deployments" href="figures/ch01/fig-1-13-general-tab-deployments.png" media-type="image/png"/>
+    <item id="fig_1_14_project_navigator_structure" href="figures/ch01/fig-1-14-project-navigator-structure.png" media-type="image/png"/>
+    <item id="fig_1_15_minimum_deployments_ios17" href="figures/ch01/fig-1-15-minimum-deployments-ios17.png" media-type="image/png"/>
+    <item id="fig_1_16_quicknote_empty_list" href="figures/ch01/fig-1-16-quicknote-empty-list.png" media-type="image/png"/>
+    <item id="fig_1_17_quicknote_toolbar" href="figures/ch01/fig-1-17-quicknote-toolbar.png" media-type="image/png"/>
+    <item id="fig_1_18_quicknote_item_added" href="figures/ch01/fig-1-18-quicknote-item-added.png" media-type="image/png"/>
+    <item id="fig_1_19_quicknote_detail_view" href="figures/ch01/fig-1-19-quicknote-detail-view.png" media-type="image/png"/>
+    <item id="fig_1_20_quicknote_edit_mode" href="figures/ch01/fig-1-20-quicknote-edit-mode.png" media-type="image/png"/>
+  </manifest>
+  <spine>
+    <itemref idref="toc"/>
+    <itemref idref="ch01"/>
+    <itemref idref="ch02"/>
+    <itemref idref="ch03"/>
+    <itemref idref="ch04"/>
+    <itemref idref="ch05"/>
+    <itemref idref="ch06"/>
+    <itemref idref="ch07"/>
+    <itemref idref="ch08"/>
+    <itemref idref="ch09"/>
+    <itemref idref="ch10"/>
+    <itemref idref="ch11"/>
+    <itemref idref="ch12"/>
+    <itemref idref="ch13"/>
+    <itemref idref="ch14"/>
+    <itemref idref="ch15"/>
+    <itemref idref="ch16"/>
+    <itemref idref="ch17"/>
+    <itemref idref="ch18"/>
+    <itemref idref="ch19"/>
+    <itemref idref="ch20"/>
+    <itemref idref="ch21"/>
+    <itemref idref="ch22"/>
+    <itemref idref="ch23"/>
+    <itemref idref="ch24"/>
+    <itemref idref="appendix-a"/>
+    <itemref idref="appendix-b"/>
+    <itemref idref="appendix-c"/>
+    <itemref idref="glossary"/>
+    <itemref idref="index"/>
+  </spine>
+</package>
