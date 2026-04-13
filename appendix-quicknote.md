@@ -205,4 +205,78 @@ Every Swift Bible example app will face these same hurdles. Plan for them:
 
 ---
 
+---
+
+## v1.1 — The Widget Fix and Photo Attachments
+
+QuickNote v1.0 shipped with a broken widget. The widget showed "No Notes" even when the app had notes. Apple didn't catch it during review — they likely didn't test adding a note and checking the widget.
+
+### The Bug
+
+The widget extension and the main app were using **separate SwiftData stores**. Each target created its own `ModelContainer` with no shared location:
+
+```swift
+// v1.0 — BROKEN: each target gets its own private database
+let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+```
+
+The app wrote notes to its sandbox. The widget read from its own sandbox. Two empty rooms in the same building with no hallway between them.
+
+### The Fix: App Groups + groupContainer
+
+Three things had to happen:
+
+1. **Register an App Group** on developer.apple.com — `group.com.ClaudeX26Bible.QuickNote`
+2. **Enable App Groups** in Xcode's Signing & Capabilities for both the app and widget extension targets
+3. **Use `groupContainer`** in the `ModelConfiguration`:
+
+```swift
+// v1.1 — FIXED: both targets share the same database
+let config = ModelConfiguration(
+    schema: schema,
+    groupContainer: .identifier("group.com.ClaudeX26Bible.QuickNote")
+)
+```
+
+That single parameter change — `groupContainer: .identifier(...)` — tells SwiftData to put the database in the shared App Group container instead of each target's private sandbox.
+
+The widget also needed `WidgetCenter.shared.reloadAllTimelines()` called after every note insert, edit, and delete so it refreshes immediately instead of waiting 30 minutes.
+
+### Debugging the Fix
+
+The fix didn't work on the first try. Three attempts:
+
+1. **Manual URL approach** — built the container URL with `FileManager.default.containerURL(forSecurityApplicationGroupIdentifier:)` and `appending(path:)`. SwiftData couldn't find the store.
+2. **Named ModelConfiguration** — added a name parameter. Caused a mismatch between app and widget.
+3. **`groupContainer: .identifier(...)`** — the API SwiftData actually provides for this exact use case. Worked immediately.
+
+The lesson: don't build your own paths when the framework has a dedicated API. The `groupContainer` parameter exists because Apple knew developers would need to share data between app and extension targets.
+
+### Photo Attachments
+
+v1.1 also added photo attachments:
+
+- **PhotosPicker** from PhotosUI for selecting library images
+- **Camera capture** via `UIImagePickerController` wrapped in `UIViewControllerRepresentable`
+- Images stored as `[Data]` with `@Attribute(.externalStorage)` so binary data doesn't bloat the SwiftData row
+- Adaptive grid display above the note body with per-image delete buttons
+
+The model gained one property:
+
+```swift
+@Attribute(.externalStorage) var imageData: [Data]
+```
+
+This is a schema change — existing installs need to delete and reinstall to migrate. For a production app with users, you'd write a migration plan. For a v1.1 with one user (the developer testing it), a fresh install is fine.
+
+### What v1.1 Teaches
+
+- **App Groups are not optional for extensions** — if your extension needs app data, configure this from day one
+- **The developer portal and Xcode must agree** — register the group online, then add it in Signing & Capabilities
+- **Don't ship features you haven't tested end-to-end** — the widget looked correct in the preview but was broken on the home screen
+- **`@Attribute(.externalStorage)`** keeps binary data efficient in SwiftData
+- **PhotosPicker is the modern replacement for UIImagePickerController** — except for camera, which still needs the UIKit bridge
+
+---
+
 *QuickNote by Claude is available on the App Store. Download it, open the Under the Hood tab, and follow along with this appendix.*

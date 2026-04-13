@@ -60,35 +60,86 @@ Three policies:
 
 Your widget runs in a separate process. It can't read your app's SwiftData store directly — unless you put the store in a shared container using App Groups.
 
-Without App Groups, the simplest approach is to create a separate `ModelContainer` in the widget that reads the same default store:
+The fix is `ModelConfiguration`'s `groupContainer` parameter. Both the app and the widget point at the same App Group identifier, and SwiftData handles the rest:
+
+**Main app (QuickNoteApp.swift):**
 
 ```swift
-private func fetchEntry() -> NoteEntry {
+var sharedModelContainer: ModelContainer = {
+    let schema = Schema([Note.self])
+    let config = ModelConfiguration(
+        schema: schema,
+        groupContainer: .identifier("group.com.ClaudeX26Bible.QuickNote")
+    )
     do {
-        let config = ModelConfiguration(
-            schema: Schema([Note.self]),
-            isStoredInMemoryOnly: false
-        )
-        let container = try ModelContainer(
-            for: Note.self, configurations: config
-        )
-        let context = ModelContext(container)
-        let descriptor = FetchDescriptor<Note>(
-            sortBy: [SortDescriptor(\.dateCreated, order: .reverse)]
-        )
-        let notes = try context.fetch(descriptor)
-        let topNotes = notes.prefix(3).map {
-            (title: $0.title.isEmpty ? "Untitled" : $0.title,
-             dateCreated: $0.dateCreated)
-        }
-        return NoteEntry(date: .now, notes: Array(topNotes))
+        return try ModelContainer(for: schema, configurations: [config])
     } catch {
-        return NoteEntry(date: .now, notes: [])
+        fatalError("Could not create ModelContainer: \(error)")
+    }
+}()
+```
+
+**Widget extension (QuickNoteWidgetExtension.swift):**
+
+```swift
+struct QuickNoteWidgetExtension: Widget {
+    let kind: String = "QuickNoteWidgetExtension"
+
+    private let modelContainer: ModelContainer = {
+        let config = ModelConfiguration(
+            groupContainer: .identifier("group.com.ClaudeX26Bible.QuickNote")
+        )
+        do {
+            return try ModelContainer(for: Note.self, configurations: config)
+        } catch {
+            fatalError("Widget ModelContainer failed: \(error)")
+        }
+    }()
+
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: kind,
+                           provider: Provider(modelContainer: modelContainer)) { entry in
+            QuickNoteWidgetEntryView(entry: entry)
+                .containerBackground(.fill.tertiary, for: .widget)
+        }
     }
 }
 ```
 
-For production apps where the widget and app truly need to share a data store, add an App Group entitlement to both targets and point the `ModelConfiguration` at the shared container URL.[^3]
+The `ModelContainer` is created once at the Widget struct level and passed into the Provider, so it's reused across all timeline fetches. The Provider uses it to create a `ModelContext` and fetch notes:
+
+```swift
+struct Provider: TimelineProvider {
+    let modelContainer: ModelContainer
+
+    private func fetchEntry() -> NoteEntry {
+        let context = ModelContext(modelContainer)
+        let descriptor = FetchDescriptor<Note>(
+            sortBy: [SortDescriptor(\.dateCreated, order: .reverse)]
+        )
+        do {
+            let notes = try context.fetch(descriptor)
+            let topNotes = notes.prefix(3).map {
+                (title: $0.title.isEmpty ? "Untitled" : $0.title,
+                 dateCreated: $0.dateCreated)
+            }
+            return NoteEntry(date: .now, notes: Array(topNotes))
+        } catch {
+            return NoteEntry(date: .now, notes: [])
+        }
+    }
+}
+```
+
+**Setting up the App Group requires three steps:**
+
+1. Register the App Group on developer.apple.com (Identifiers > App Groups > add `group.com.YourTeam.YourApp`)
+2. In Xcode, go to Signing & Capabilities for **both** the app target and the widget extension target, add the App Groups capability, and check the group you created
+3. Use `groupContainer: .identifier("group.com.YourTeam.YourApp")` in both `ModelConfiguration` instances
+
+Without this, the widget creates its own empty database in its own sandbox and shows "No Notes" — even though the app has data. This was the exact bug we shipped in QuickNote v1.0 and fixed in v1.1.[^3]
+
+To force the widget to refresh when notes change, call `WidgetCenter.shared.reloadAllTimelines()` after any insert, edit, or delete in the main app.
 
 ### Creating a Widget Extension Target
 
