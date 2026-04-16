@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import PhotosUI
 
 struct ItemListView: View {
     let folder: Folder
@@ -15,7 +16,9 @@ struct ItemListView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var showAddItem = false
     @State private var showScanner = false
+    @State private var showPhotoPicker = false
     @State private var scannedPages: [Data] = []
+    @State private var selectedPhotos: [PhotosPickerItem] = []
 
     var filteredItems: [VaultItem] {
         let items = folder.items.sorted { $0.dateModified > $1.dateModified }
@@ -28,10 +31,8 @@ struct ItemListView: View {
         }
     }
 
-    /// Cards folder opens scanner first, others open the form directly
-    var isCardFolder: Bool {
-        folder.name == "Cards"
-    }
+    var isCardFolder: Bool { folder.name == "Cards" }
+    var isPhotoFolder: Bool { folder.name == "Photos" }
 
     var body: some View {
         List(selection: $selectedItem) {
@@ -47,6 +48,8 @@ struct ItemListView: View {
                 Button {
                     if isCardFolder {
                         showScanner = true
+                    } else if isPhotoFolder {
+                        showPhotoPicker = true
                     } else {
                         showAddItem = true
                     }
@@ -63,7 +66,6 @@ struct ItemListView: View {
         }
         #if os(iOS)
         .sheet(isPresented: $showScanner, onDismiss: {
-            // Open the form after the scanner sheet fully closes
             if !scannedPages.isEmpty {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     showAddItem = true
@@ -72,6 +74,24 @@ struct ItemListView: View {
         }) {
             DocumentScannerView { pages in
                 scannedPages = pages
+            }
+        }
+        .photosPicker(isPresented: $showPhotoPicker, selection: $selectedPhotos, matching: .images)
+        .onChange(of: selectedPhotos) { _, newPhotos in
+            Task {
+                var images: [Data] = []
+                for photo in newPhotos {
+                    if let data = try? await photo.loadTransferable(type: Data.self) {
+                        images.append(data)
+                    }
+                }
+                if !images.isEmpty {
+                    scannedPages = images
+                    selectedPhotos = []
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        showAddItem = true
+                    }
+                }
             }
         }
         #endif

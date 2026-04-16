@@ -129,6 +129,9 @@ struct ItemDetailView: View {
             TextField("Enter PIN or code", text: $item.pin)
                 .font(.system(size: 20, design: .monospaced))
                 .textFieldStyle(.roundedBorder)
+                #if os(iOS)
+                .keyboardType(item.folder?.name == "Cards" ? .numberPad : .default)
+                #endif
         }
     }
 

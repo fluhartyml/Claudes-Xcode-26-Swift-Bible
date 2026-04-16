@@ -67,10 +67,9 @@ struct ContentView: View {
         guard folders.isEmpty else { return }
         let defaults: [(String, String, Int)] = [
             ("Cards", "creditcard.fill", 0),
-            ("Codes", "lock.fill", 1),
-            ("Accounts", "person.crop.circle.fill", 2),
-            ("Photos", "photo.fill", 3),
-            ("Notes", "note.text", 4),
+            ("Codes / Accounts", "lock.fill", 1),
+            ("Photos", "photo.fill", 2),
+            ("Notes", "note.text", 3),
         ]
         for (name, icon, order) in defaults {
             let folder = Folder(name: name, iconName: icon, sortOrder: order)

@@ -67,6 +67,9 @@ struct AddItemView: View {
                 Section {
                     TextField("PIN, code, or password", text: $pin)
                         .font(.system(size: 20, design: .monospaced))
+                        #if os(iOS)
+                        .keyboardType(folder.name == "Cards" ? .numberPad : .default)
+                        #endif
                 } header: {
                     Text("PIN / Code")
                         .font(.system(size: 16))
