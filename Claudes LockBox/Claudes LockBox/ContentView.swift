@@ -10,50 +10,71 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @Query(sort: \Folder.sortOrder) private var folders: [Folder]
+    @State private var selectedFolder: Folder?
+    @State private var selectedItem: VaultItem?
+    @State private var showAddFolder = false
+    @State private var searchText = ""
+    @State private var columnVisibility: NavigationSplitViewVisibility = .all
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
-            .navigationSplitViewColumnWidth(min: 180, ideal: 200)
-            .toolbar {
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
+        NavigationSplitView(columnVisibility: $columnVisibility) {
+            // Sidebar: Folders
+            SidebarView(
+                folders: folders,
+                selectedFolder: $selectedFolder,
+                showAddFolder: $showAddFolder
+            )
+        } content: {
+            // Item list for selected folder
+            if let folder = selectedFolder {
+                ItemListView(
+                    folder: folder,
+                    selectedItem: $selectedItem,
+                    searchText: $searchText
+                )
+            } else {
+                ContentUnavailableView(
+                    "Select a Folder",
+                    systemImage: "folder",
+                    description: Text("Choose a folder from the sidebar")
+                )
+                .font(.system(size: 18))
             }
         } detail: {
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
+            // Detail view for selected item
+            if let item = selectedItem {
+                ItemDetailView(item: item)
+            } else {
+                ContentUnavailableView(
+                    "Select an Item",
+                    systemImage: "doc.text",
+                    description: Text("Choose an item to view its details")
+                )
+                .font(.system(size: 18))
             }
         }
+        .searchable(text: $searchText, prompt: "Search vault")
+        .sheet(isPresented: $showAddFolder) {
+            AddFolderView()
+        }
+        .onAppear {
+            seedDefaultFolders()
+        }
     }
-}
 
-#Preview {
-    ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+    private func seedDefaultFolders() {
+        guard folders.isEmpty else { return }
+        let defaults: [(String, String, Int)] = [
+            ("Cards", "creditcard.fill", 0),
+            ("Codes", "lock.fill", 1),
+            ("Accounts", "person.crop.circle.fill", 2),
+            ("Photos", "photo.fill", 3),
+            ("Notes", "note.text", 4),
+        ]
+        for (name, icon, order) in defaults {
+            let folder = Folder(name: name, iconName: icon, sortOrder: order)
+            modelContext.insert(folder)
+        }
+    }
 }
