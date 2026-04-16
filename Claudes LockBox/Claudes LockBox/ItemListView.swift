@@ -56,7 +56,7 @@ struct ItemListView: View {
             }
         }
         .sheet(isPresented: $showAddItem) {
-            AddItemView(folder: folder, initialImages: scannedPages)
+            AddItemView(folder: folder, initialImages: $scannedPages)
                 .onDisappear {
                     scannedPages = []
                 }

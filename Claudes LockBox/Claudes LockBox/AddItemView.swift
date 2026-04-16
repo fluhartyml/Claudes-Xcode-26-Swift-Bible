@@ -13,7 +13,7 @@ import UIKit
 
 struct AddItemView: View {
     let folder: Folder
-    var initialImages: [Data] = []
+    @Binding var initialImages: [Data]
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @State private var title = ""
