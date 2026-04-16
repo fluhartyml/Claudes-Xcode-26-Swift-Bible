@@ -27,6 +27,9 @@ struct ItemDetailView: View {
                     .font(.system(size: 24, weight: .bold))
                     .textFieldStyle(.plain)
 
+                // Scanned images / photos (right below title)
+                photosSection
+
                 // PIN display and copy
                 if !item.pin.isEmpty {
                     pinDisplaySection
@@ -37,9 +40,6 @@ struct ItemDetailView: View {
 
                 // Notes
                 notesSection
-
-                // Photos
-                photosSection
             }
             .padding()
         }

@@ -417,6 +417,7 @@
 				ENABLE_RESOURCE_ACCESS_USB = NO;
 				ENABLE_USER_SELECTED_FILES = readwrite;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Claudes-LockBox-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Claudes LockBox";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Claude's LockBox uses the camera to scan cards and documents";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Claude's LockBox uses Face ID to protect your vault  ";
@@ -472,6 +473,7 @@
 				ENABLE_RESOURCE_ACCESS_USB = NO;
 				ENABLE_USER_SELECTED_FILES = readwrite;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Claudes-LockBox-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Claudes LockBox";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Claude's LockBox uses the camera to scan cards and documents";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Claude's LockBox uses Face ID to protect your vault  ";
