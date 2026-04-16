@@ -14,6 +14,8 @@ struct ItemListView: View {
     @Binding var searchText: String
     @Environment(\.modelContext) private var modelContext
     @State private var showAddItem = false
+    @State private var showScanner = false
+    @State private var scannedPages: [Data] = []
 
     var filteredItems: [VaultItem] {
         let items = folder.items.sorted { $0.dateModified > $1.dateModified }
@@ -26,24 +28,16 @@ struct ItemListView: View {
         }
     }
 
+    /// Cards folder opens scanner first, others open the form directly
+    var isCardFolder: Bool {
+        folder.name == "Cards"
+    }
+
     var body: some View {
         List(selection: $selectedItem) {
             ForEach(filteredItems) { item in
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(item.title)
-                        .font(.system(size: 18, weight: .semibold))
-                    Text(item.dateModified, format: .dateTime.month(.abbreviated).day().year())
-                        .font(.system(size: 16))
-                        .foregroundStyle(.secondary)
-                }
-                .tag(item)
-                .draggable(item.title) {
-                    // Drag preview
-                    Label(item.title, systemImage: "doc.fill")
-                        .padding(8)
-                        .background(.regularMaterial)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                }
+                itemRow(item)
+                    .tag(item)
             }
             .onDelete(perform: deleteItems)
         }
@@ -51,22 +45,76 @@ struct ItemListView: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
-                    showAddItem = true
+                    if isCardFolder {
+                        showScanner = true
+                    } else {
+                        showAddItem = true
+                    }
                 } label: {
                     Label("Add Item", systemImage: "plus")
                 }
             }
         }
         .sheet(isPresented: $showAddItem) {
-            AddItemView(folder: folder)
+            AddItemView(folder: folder, initialImages: scannedPages)
+                .onDisappear {
+                    scannedPages = []
+                }
         }
+        #if os(iOS)
+        .sheet(isPresented: $showScanner) {
+            DocumentScannerView { pages in
+                scannedPages = pages
+                // After scanning, open the form with images attached
+                showAddItem = true
+            }
+        }
+        #endif
         .dropDestination(for: String.self) { droppedStrings, _ in
-            // Accept text drops as new vault items
             for text in droppedStrings {
                 let newItem = VaultItem(title: text, folder: folder)
                 modelContext.insert(newItem)
             }
             return true
+        }
+    }
+
+    @ViewBuilder
+    private func itemRow(_ item: VaultItem) -> some View {
+        HStack(spacing: 12) {
+            // Show first image thumbnail if available
+            #if canImport(UIKit)
+            if let firstImage = item.imageData.first,
+               let uiImage = UIImage(data: firstImage) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 50, height: 50)
+                    .clipShape(RoundedRectangle(cornerRadius: 6))
+            }
+            #endif
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(item.title)
+                    .font(.system(size: 18, weight: .semibold))
+
+                HStack(spacing: 8) {
+                    if !item.imageData.isEmpty {
+                        Label("\(item.imageData.count)", systemImage: "doc.fill")
+                            .font(.system(size: 14))
+                            .foregroundStyle(.secondary)
+                    }
+                    Text(item.dateModified, format: .dateTime.month(.abbreviated).day().year())
+                        .font(.system(size: 14))
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+        .draggable(item.title) {
+            Label(item.title, systemImage: "doc.fill")
+                .padding(8)
+                .background(.regularMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
         }
     }
 

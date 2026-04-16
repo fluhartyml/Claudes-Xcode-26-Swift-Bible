@@ -7,14 +7,22 @@
 
 import SwiftUI
 import SwiftData
+#if canImport(UIKit)
+import UIKit
+#endif
 
 struct AddItemView: View {
     let folder: Folder
+    var initialImages: [Data] = []
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @State private var title = ""
     @State private var pin = ""
     @State private var notes = ""
+    @State private var attachedImages: [Data] = []
+    @State private var showScanner = false
+    @State private var showCamera = false
+    @State private var viewingImage: Data?
 
     var body: some View {
         NavigationStack {
@@ -27,10 +35,37 @@ struct AddItemView: View {
                         .font(.system(size: 16))
                 }
 
+                // Scanned images section
+                if !attachedImages.isEmpty {
+                    Section {
+                        ScrollView(.horizontal) {
+                            HStack(spacing: 12) {
+                                ForEach(attachedImages.indices, id: \.self) { index in
+                                    thumbnailView(at: index)
+                                }
+                            }
+                            .padding(.vertical, 4)
+                        }
+                    } header: {
+                        HStack {
+                            Text("Scans")
+                                .font(.system(size: 16))
+                            Spacer()
+                            #if os(iOS)
+                            Button {
+                                showScanner = true
+                            } label: {
+                                Label("Add Page", systemImage: "doc.viewfinder")
+                                    .font(.system(size: 14))
+                            }
+                            #endif
+                        }
+                    }
+                }
+
                 Section {
                     TextField("PIN, code, or password", text: $pin)
                         .font(.system(size: 20, design: .monospaced))
-                        .keyboardType(.default)
                 } header: {
                     Text("PIN / Code")
                         .font(.system(size: 16))
@@ -59,12 +94,61 @@ struct AddItemView: View {
                             pin: pin,
                             folder: folder
                         )
+                        newItem.imageData = attachedImages
                         modelContext.insert(newItem)
                         dismiss()
                     }
                     .font(.system(size: 18, weight: .semibold))
                 }
             }
+            .onAppear {
+                if attachedImages.isEmpty && !initialImages.isEmpty {
+                    attachedImages = initialImages
+                }
+            }
+            #if os(iOS)
+            .sheet(isPresented: $showScanner) {
+                DocumentScannerView { pages in
+                    attachedImages.append(contentsOf: pages)
+                }
+            }
+            .sheet(isPresented: $showCamera) {
+                CameraCaptureView { data in
+                    attachedImages.append(data)
+                }
+            }
+            .sheet(item: $viewingImage) { imageData in
+                ImageViewerView(imageData: imageData)
+            }
+            #endif
         }
     }
+
+    @ViewBuilder
+    private func thumbnailView(at index: Int) -> some View {
+        #if canImport(UIKit)
+        if let uiImage = UIImage(data: attachedImages[index]) {
+            Image(uiImage: uiImage)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 100, height: 100)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .onTapGesture {
+                    viewingImage = attachedImages[index]
+                }
+                .contextMenu {
+                    Button(role: .destructive) {
+                        attachedImages.remove(at: index)
+                    } label: {
+                        Label("Remove Page", systemImage: "trash")
+                    }
+                }
+        }
+        #endif
+    }
+}
+
+// Make Data identifiable for sheet(item:)
+extension Data: @retroactive Identifiable {
+    public var id: Int { hashValue }
 }

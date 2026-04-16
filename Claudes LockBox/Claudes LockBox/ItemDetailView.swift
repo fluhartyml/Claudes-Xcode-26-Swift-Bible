@@ -15,6 +15,9 @@ struct ItemDetailView: View {
     @Bindable var item: VaultItem
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var showShareSheet = false
+    @State private var showCamera = false
+    @State private var showScanner = false
+    @State private var viewingImage: Data?
 
     var body: some View {
         ScrollView {
@@ -55,6 +58,20 @@ struct ItemDetailView: View {
             ShareSheetView(item: item)
             #endif
         }
+        #if os(iOS)
+        .sheet(isPresented: $showCamera) {
+            CameraCaptureView { data in
+                item.imageData.append(data)
+                item.dateModified = Date()
+            }
+        }
+        .sheet(isPresented: $showScanner) {
+            DocumentScannerView { pages in
+                item.imageData.append(contentsOf: pages)
+                item.dateModified = Date()
+            }
+        }
+        #endif
         .onChange(of: selectedPhoto) { _, newPhoto in
             Task {
                 if let data = try? await newPhoto?.loadTransferable(type: Data.self) {
@@ -66,6 +83,11 @@ struct ItemDetailView: View {
         .onChange(of: item.title) { _, _ in item.dateModified = Date() }
         .onChange(of: item.notes) { _, _ in item.dateModified = Date() }
         .onChange(of: item.pin) { _, _ in item.dateModified = Date() }
+        #if os(iOS)
+        .sheet(item: $viewingImage) { imageData in
+            ImageViewerView(imageData: imageData)
+        }
+        #endif
     }
 
     // MARK: - PIN Display
@@ -131,17 +153,31 @@ struct ItemDetailView: View {
 
     private var photosSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text("Photos")
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(.secondary)
+            Text("Attachments")
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundStyle(.secondary)
 
-                Spacer()
-
+            HStack(spacing: 16) {
                 PhotosPicker(selection: $selectedPhoto, matching: .images) {
-                    Label("Add Photo", systemImage: "photo.badge.plus")
+                    Label("Library", systemImage: "photo.badge.plus")
                         .font(.system(size: 18))
                 }
+
+                #if os(iOS)
+                Button {
+                    showCamera = true
+                } label: {
+                    Label("Camera", systemImage: "camera")
+                        .font(.system(size: 18))
+                }
+
+                Button {
+                    showScanner = true
+                } label: {
+                    Label("Scan", systemImage: "doc.viewfinder")
+                        .font(.system(size: 18))
+                }
+                #endif
             }
 
             if !item.imageData.isEmpty {
@@ -165,12 +201,20 @@ struct ItemDetailView: View {
                 .scaledToFill()
                 .frame(width: 150, height: 150)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
+                .onTapGesture {
+                    viewingImage = item.imageData[index]
+                }
                 .contextMenu {
+                    Button {
+                        viewingImage = item.imageData[index]
+                    } label: {
+                        Label("View Full Size", systemImage: "arrow.up.left.and.arrow.down.right")
+                    }
                     Button(role: .destructive) {
                         item.imageData.remove(at: index)
                         item.dateModified = Date()
                     } label: {
-                        Label("Delete Photo", systemImage: "trash")
+                        Label("Delete Page", systemImage: "trash")
                     }
                 }
         }
