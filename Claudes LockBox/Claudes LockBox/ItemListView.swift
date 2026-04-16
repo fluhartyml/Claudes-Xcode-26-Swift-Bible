@@ -62,11 +62,16 @@ struct ItemListView: View {
                 }
         }
         #if os(iOS)
-        .sheet(isPresented: $showScanner) {
+        .sheet(isPresented: $showScanner, onDismiss: {
+            // Open the form after the scanner sheet fully closes
+            if !scannedPages.isEmpty {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    showAddItem = true
+                }
+            }
+        }) {
             DocumentScannerView { pages in
                 scannedPages = pages
-                // After scanning, open the form with images attached
-                showAddItem = true
             }
         }
         #endif

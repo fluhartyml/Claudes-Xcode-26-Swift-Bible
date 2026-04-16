@@ -157,27 +157,41 @@ struct ItemDetailView: View {
                 .font(.system(size: 18, weight: .semibold))
                 .foregroundStyle(.secondary)
 
-            HStack(spacing: 16) {
+            HStack(spacing: 30) {
                 PhotosPicker(selection: $selectedPhoto, matching: .images) {
-                    Label("Library", systemImage: "photo.badge.plus")
-                        .font(.system(size: 18))
+                    VStack(spacing: 4) {
+                        Image(systemName: "photo.badge.plus")
+                            .font(.system(size: 24))
+                        Text("Library")
+                            .font(.system(size: 14))
+                    }
                 }
 
                 #if os(iOS)
                 Button {
                     showCamera = true
                 } label: {
-                    Label("Camera", systemImage: "camera")
-                        .font(.system(size: 18))
+                    VStack(spacing: 4) {
+                        Image(systemName: "camera")
+                            .font(.system(size: 24))
+                        Text("Camera")
+                            .font(.system(size: 14))
+                    }
                 }
 
                 Button {
                     showScanner = true
                 } label: {
-                    Label("Scan", systemImage: "doc.viewfinder")
-                        .font(.system(size: 18))
+                    VStack(spacing: 4) {
+                        Image(systemName: "doc.viewfinder")
+                            .font(.system(size: 24))
+                        Text("Scan")
+                            .font(.system(size: 14))
+                    }
                 }
                 #endif
+
+                Spacer()
             }
 
             if !item.imageData.isEmpty {

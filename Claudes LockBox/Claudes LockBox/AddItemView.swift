@@ -20,6 +20,7 @@ struct AddItemView: View {
     @State private var pin = ""
     @State private var notes = ""
     @State private var attachedImages: [Data] = []
+    @State private var hasLoadedInitial = false
     @State private var showScanner = false
     @State private var showCamera = false
     @State private var viewingImage: Data?
@@ -102,8 +103,9 @@ struct AddItemView: View {
                 }
             }
             .onAppear {
-                if attachedImages.isEmpty && !initialImages.isEmpty {
+                if !hasLoadedInitial {
                     attachedImages = initialImages
+                    hasLoadedInitial = true
                 }
             }
             #if os(iOS)
