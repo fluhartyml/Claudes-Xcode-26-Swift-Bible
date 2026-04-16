@@ -43,7 +43,8 @@ struct ItemDetailView: View {
             }
             .padding()
         }
-        .navigationTitle(item.title)
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {

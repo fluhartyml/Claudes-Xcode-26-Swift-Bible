@@ -55,7 +55,7 @@ struct ItemListView: View {
                 }
             }
         }
-        .sheet(isPresented: $showAddItem) {
+        .fullScreenCover(isPresented: $showAddItem) {
             AddItemView(folder: folder, initialImages: $scannedPages)
                 .onDisappear {
                     scannedPages = []

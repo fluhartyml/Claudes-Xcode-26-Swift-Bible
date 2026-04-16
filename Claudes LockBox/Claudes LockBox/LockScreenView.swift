@@ -52,6 +52,9 @@ struct LockScreenView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color(.systemBackground))
+            .ignoresSafeArea()
             .onAppear {
                 authenticate()
             }
