@@ -9,24 +9,48 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    var body: some View {
+        TabView {
+            VaultTabView()
+                .tabItem {
+                    Label("Vault", systemImage: "lock.shield.fill")
+                }
+
+            UnderTheHoodView()
+                .tabItem {
+                    Label("Under the Hood", systemImage: "wrench.and.screwdriver")
+                }
+        }
+    }
+}
+
+struct VaultTabView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Folder.sortOrder) private var folders: [Folder]
     @State private var selectedFolder: Folder?
     @State private var selectedItem: VaultItem?
     @State private var showAddFolder = false
+    @State private var showAbout = false
     @State private var searchText = ""
     @State private var columnVisibility: NavigationSplitViewVisibility = .all
 
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
-            // Sidebar: Folders
             SidebarView(
                 folders: folders,
                 selectedFolder: $selectedFolder,
                 showAddFolder: $showAddFolder
             )
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        showAbout = true
+                    } label: {
+                        Image(systemName: "info.circle")
+                    }
+                }
+            }
         } content: {
-            // Item list for selected folder
             if let folder = selectedFolder {
                 ItemListView(
                     folder: folder,
@@ -42,7 +66,6 @@ struct ContentView: View {
                 .font(.system(size: 18))
             }
         } detail: {
-            // Detail view for selected item
             if let item = selectedItem {
                 ItemDetailView(item: item)
             } else {
@@ -57,6 +80,9 @@ struct ContentView: View {
         .searchable(text: $searchText, prompt: "Search vault")
         .sheet(isPresented: $showAddFolder) {
             AddFolderView()
+        }
+        .sheet(isPresented: $showAbout) {
+            AboutView()
         }
         .onAppear {
             seedDefaultFolders()
