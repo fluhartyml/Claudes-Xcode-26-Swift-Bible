@@ -57,6 +57,9 @@
   <h2 id="protocol">Protocol</h2>
   <p>A contract that defines what a type must be able to do, without saying how it does it. Think of it like a job description — it lists the requirements, but each person who fills the role does the work their own way. In Swift, a type "conforms" to a protocol by implementing everything the protocol requires.</p>
 
+  <h2 id="semantic-placement">Semantic Placement</h2>
+  <p>A SwiftUI <code>ToolbarItem</code> placement that describes a button's role — <code>.primaryAction</code>, <code>.cancellationAction</code>, <code>.destructiveAction</code>, <code>.confirmationAction</code>, <code>.navigation</code> — rather than its physical position on screen. The system then places the button correctly for each platform: iOS puts <code>.primaryAction</code> at the trailing edge of the navigation bar, macOS puts it on the toolbar's trailing side, and iPadOS adapts for both compact and regular size classes. Prefer semantic placements over positional ones like <code>.topBarTrailing</code> or <code>.topBarLeading</code>, which only work on iOS and tie the code to a single platform's conventions. The rule of thumb: tell SwiftUI <em>what the button is</em> (a primary action, a cancel button), and the framework handles the <em>where</em>.</p>
+
   <h2 id="struct">Struct (Structure)</h2>
   <p>A lightweight container that bundles data and behavior together as a single unit. In Swift, most of what you build is a struct — your views, your data models, your custom types. Unlike a class, a struct is a value type: when you pass it to a function or assign it to another variable, Swift makes a copy instead of sharing the original. SwiftUI views are structs because they're meant to be cheap, disposable descriptions of what the screen should look like — SwiftUI creates and destroys them constantly.</p>
 
