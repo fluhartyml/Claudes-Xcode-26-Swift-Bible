@@ -43,7 +43,7 @@ CHAPTER_FILES = [
     ("21", "21-Git-And-GitHub.md"),
     ("22", "22-AI-Chatbot-Integration.md"),
     ("A", "appendix-github-setup.md"),
-    ("B", "appendix-wraply.md"),
+    ("B", "appendix-claudes-web-wrapper.md"),
     ("C", "appendix-quicknote.md"),
 ]
 
