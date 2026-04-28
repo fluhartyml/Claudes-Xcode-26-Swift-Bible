@@ -178,6 +178,8 @@
   },
   "active": "516429c330d81661",
   "lastOpenFiles": [
+    "Xcode26/QuickNote/QuickNote/Assets.xcassets/AppIcon.appiconset/AppIcon-Dark.png",
+    "Xcode26/QuickNote/QuickNote/Assets.xcassets/AppIcon.appiconset/AppIcon-Light.png",
     "Claudes LockBox/Claudes LockBox/IdentifierTaggedSourceView.swift",
     "Claudes LockBox/Claudes LockBox/LexiconSheet.swift",
     "Claudes LockBox/Claudes LockBox/LexiconContent.swift",
@@ -187,7 +189,6 @@
     "Part-I-The-Swift-Language/Chapter-Y/Chapter-Y.html",
     "Part-I-The-Swift-Language/Chapter-Y",
     "Part-I-The-Swift-Language/Chapter-X/Chapter-X.html",
-    "Part-I-The-Swift-Language/Chapter-X",
-    "Part-I-The-Swift-Language/Chapter-W/Chapter-W.html"
+    "Part-I-The-Swift-Language/Chapter-X"
   ]
 }
